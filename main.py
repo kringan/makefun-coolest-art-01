@@ -14,4 +14,7 @@ dst = os.path.join(out_dir, "entry.png")
 shutil.copyfile(src, dst)
 size = os.path.getsize(dst)
 assert size <= 1_048_576, f"entry.png too big: {size} bytes"
-print(f"wrote {dst} ({size} bytes)")
+with open(dst, "rb") as f:
+    magic = f.read(8)
+assert magic == b"\x89PNG\r\n\x1a\n", "entry.png is not a PNG"
+print(f"wrote {dst} ({size} bytes, PNG verified)")
